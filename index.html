@@ -17,19 +17,26 @@
   </nav>
   <div class="container">
     <div class="row">
+      <div class="col-md-9">
+        <canvas id="interpolationChartWaste"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row">
         <div class="col-md-4">
             <div class="chart-container">
-                <canvas id="interpolationChartGood" style="height: 300px;"></canvas>
+                <canvas id="interpolationChartGood"></canvas>
             </div>
         </div>
         <div class="col-md-4">
             <div class="chart-container">
-                <canvas id="interpolationChartAverage" style="height: 300px;"></canvas>
+                <canvas id="interpolationChartAverage"></canvas>
             </div>
         </div>
         <div class="col-md-4">
             <div class="chart-container">
-                <canvas id="interpolationChartBad" style="height: 300px;"></canvas>
+                <canvas id="interpolationChartBad"></canvas>
             </div>
         </div>
     </div>
@@ -86,6 +93,7 @@
         createChartGood(data.feeds);
         createChartAverage(data.feeds);
         createChartBad(data.feeds);
+        createChartWaste(data.feeds);
       })
       .catch(error => {
         console.error('Error:', error);
@@ -217,6 +225,41 @@
 
             // Get the chart canvas element
             const ctx = document.getElementById('interpolationChartBad').getContext('2d');
+
+            // Create the chart
+            const myChart = new Chart(ctx, {
+            type: 'line',
+            data: chartData,
+            options: {
+                responsive: true, // Enable chart responsiveness
+                maintainAspectRatio: false, // Do not maintain aspect ratio to change height freely
+                height: 300, // Set the height of the chart (in pixels)
+        // Add other chart options here (e.g., title, legend, etc.)
+            },
+            });
+        }
+
+    // Sample data for the chart
+        function createChartWaste(data){
+            var date=[];
+            var good=[];
+            data.forEach(item => {date.push(formatDate(item.created_at))});
+            data.forEach(item => {good.push(item.field4)});
+            const chartData = {
+            labels: date,
+            datasets: [
+                {
+                label: 'Food Waste',
+                data: good,
+                borderColor: 'rgba(75, 192, 192, 1)',
+                fill: false,
+                tension: 0.4, // Interpolation mode (0 to 1)
+                }
+            ],
+            };
+
+            // Get the chart canvas element
+            const ctx = document.getElementById('interpolationChartWaste').getContext('2d');
 
             // Create the chart
             const myChart = new Chart(ctx, {
