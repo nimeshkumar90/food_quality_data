@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard with Table</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="#">Food Quality Data</a>
+      <!-- Add any additional navigation links or elements here -->
+    </div>
+  </nav>
+  <div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="chart-container">
+                <canvas id="interpolationChartGood" style="height: 300px;"></canvas>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="chart-container">
+                <canvas id="interpolationChartAverage" style="height: 300px;"></canvas>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="chart-container">
+                <canvas id="interpolationChartBad" style="height: 300px;"></canvas>
+            </div>
+        </div>
+    </div>
+  </div>
+  <!-- Content -->
+  <div class="container mt-4">
+
+      <!-- Main Content Area -->
+      <main class="col-md-9">
+        <h1>Mandavali school food quality checker</h1>
+        <!-- Table -->
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>School Name</th>
+                <th>Good</th>
+                <th>Average</th>
+                <th>Bad</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody id="table-body">
+              
+            </tbody>
+          </table>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Charts.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // Replace 'YOUR_API_URL' with the actual URL of the API you want to read from
+    const apiUrl = 'https://api.thingspeak.com/channels/2220272/feeds.json?api_key=ZOPHONXD1O8AXZ64&results=2';
+    fetch(apiUrl)
+      .then(response => {
+        // Check if the response is successful
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        // Parse the response body as JSON
+        return response.json();
+      })
+      .then(data => {
+        // Data is the parsed JSON response
+        console.log(data.feeds);
+        // You can now work with the data here
+        createTableFromJSON(data.feeds);
+        createChartGood(data.feeds);
+        createChartAverage(data.feeds);
+        createChartBad(data.feeds);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+      //changing the date format
+      // Function to create and populate the table
+    function createTableFromJSON(data) {
+      const tableBody = document.getElementById("table-body");
+      
+      data.forEach(item => {
+        const row = document.createElement("tr");
+        var date=formatDate(item.created_at);
+        row.innerHTML = `
+          <td>GBSSS Mandavali</td>
+          <td>${item.field1}</td>
+          <td>${item.field2}</td>
+          <td>${item.field3}</td>
+          <td>${date}</td>
+        `;
+        tableBody.appendChild(row);
+      });
+    }
+
+
+        function formatDate(datetimeString) {
+        // Create a Date object from the datetime string
+        const dateObj = new Date(datetimeString);
+
+        // Get the individual components of the date
+        const year = dateObj.getFullYear();
+        const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+        const day = String(dateObj.getDate()).padStart(2, '0');
+
+        // Combine the components to form the date string in the format 'YYYY-MM-DD'
+        const formattedDate = `${year}-${month}-${day}`;
+
+        return formattedDate;
+        }
+        //charts js
+        // Sample data for the chart
+        function createChartGood(data){
+            var date=[];
+            var good=[];
+            data.forEach(item => {date.push(formatDate(item.created_at))});
+            data.forEach(item => {good.push(item.field1)});
+            const chartData = {
+            labels: date,
+            datasets: [
+                {
+                label: 'Good',
+                data: good,
+                borderColor: 'rgba(75, 192, 192, 1)',
+                fill: false,
+                tension: 0.4, // Interpolation mode (0 to 1)
+                }
+            ],
+            };
+
+            // Get the chart canvas element
+            const ctx = document.getElementById('interpolationChartGood').getContext('2d');
+
+            // Create the chart
+            const myChart = new Chart(ctx, {
+            type: 'line',
+            data: chartData,
+            options: {
+                responsive: true, // Enable chart responsiveness
+                maintainAspectRatio: false, // Do not maintain aspect ratio to change height freely
+                height: 300, // Set the height of the chart (in pixels)
+        // Add other chart options here (e.g., title, legend, etc.)
+            },
+            });
+        }
+
+        // Sample data for the chart
+        function createChartAverage(data){
+            var date=[];
+            var good=[];
+            data.forEach(item => {date.push(formatDate(item.created_at))});
+            data.forEach(item => {good.push(item.field2)});
+            const chartData = {
+            labels: date,
+            datasets: [
+                {
+                label: 'Average',
+                data: good,
+                borderColor: 'rgba(75, 192, 192, 1)',
+                fill: false,
+                tension: 0.4, // Interpolation mode (0 to 1)
+                }
+            ],
+            };
+
+            // Get the chart canvas element
+            const ctx = document.getElementById('interpolationChartAverage').getContext('2d');
+
+            // Create the chart
+            const myChart = new Chart(ctx, {
+            type: 'line',
+            data: chartData,
+            options: {
+                responsive: true, // Enable chart responsiveness
+                maintainAspectRatio: false, // Do not maintain aspect ratio to change height freely
+                height: 300, // Set the height of the chart (in pixels)
+        // Add other chart options here (e.g., title, legend, etc.)
+            },
+            });
+        }
+
+        // Sample data for the chart
+        function createChartBad(data){
+            var date=[];
+            var good=[];
+            data.forEach(item => {date.push(formatDate(item.created_at))});
+            data.forEach(item => {good.push(item.field3)});
+            const chartData = {
+            labels: date,
+            datasets: [
+                {
+                label: 'Bad',
+                data: good,
+                borderColor: 'rgba(75, 192, 192, 1)',
+                fill: false,
+                tension: 0.4, // Interpolation mode (0 to 1)
+                }
+            ],
+            };
+
+            // Get the chart canvas element
+            const ctx = document.getElementById('interpolationChartBad').getContext('2d');
+
+            // Create the chart
+            const myChart = new Chart(ctx, {
+            type: 'line',
+            data: chartData,
+            options: {
+                responsive: true, // Enable chart responsiveness
+                maintainAspectRatio: false, // Do not maintain aspect ratio to change height freely
+                height: 300, // Set the height of the chart (in pixels)
+        // Add other chart options here (e.g., title, legend, etc.)
+            },
+            });
+        }
+    </script>
+</body>
+</html>
+
+
