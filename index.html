@@ -85,7 +85,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
     // Replace 'YOUR_API_URL' with the actual URL of the API you want to read from
-    const apiUrl = 'https://api.thingspeak.com/channels/2220272/feeds.json?results=200';
+    const apiUrl = 'https://api.thingspeak.com/channels/2220272/feeds.json?results=500';
     fetch(apiUrl)
       .then(response => {
         // Check if the response is successful
@@ -112,7 +112,8 @@
       // Function to create and populate the table
     function createTableFromJSON(data) {
       const tableBody = document.getElementById("table-body");
-      
+      console.log("Nimesh");
+      console.log(data);
       data.forEach(item => {
         const row = document.createElement("tr");
         var date=formatDate(item.created_at);
