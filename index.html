@@ -112,10 +112,6 @@
         data.forEach(item=>{
           var date1=formatDate(item.created_at);
           console.log(date1);
-          good=Number(isNaN(item.field1) ? 0 : item.field1);
-          average=Number(isNaN(item.field2) ? 0 : item.field2);
-          bad=Number(isNaN(item.field3) ? 0 : item.field3);
-          food_weight=Number(isNaN(item.field4) ? 0 : item.field4);
           if (date == date1){
             console.log("field1-------->");
             console.log(item.field1);
@@ -135,10 +131,10 @@
             row={"field1":good, "field2":average, "field3":bad, "field4":food_weight, "created_at":date}
             data_for_table.push(row)
             date=date1;
-            /*good=0;
+            good=0;
             average=0;
             bad=0;
-            food_weight=0*/
+            food_weight=0
           }
         });
         row={"field1":good, "field2":average, "field3":bad, "field4":food_weight, "created_at":date}
