@@ -113,6 +113,7 @@
         var data_for_table=[]
         data.forEach(item=>{
           var date1=formatDate(item.created_at);
+          console.log(date1);
           if (date == date1){
             good=good+Number(isNaN(item.field1) ? 0 : item.field1);
             console.log("Good");
