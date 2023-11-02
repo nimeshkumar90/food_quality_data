@@ -107,12 +107,12 @@
       });
     function createDisplayData(data)
       {
-        var good=0, average=0, bad=0, food_weight=Number(data[0].field4), date=formatDate(data[0].created_at);
+        var count=0, good=0, average=0, bad=0, food_weight=Number(data[0].field4), date=formatDate(data[0].created_at);
         var data_for_table=[]
         data.forEach(item=>{
           var date1=formatDate(item.created_at);
           console.log(date1);
-          if (date == date1){
+          if (date == date1 || count==0 ){
             console.log("field1-------->");
             console.log(item.field1);
             console.log("date--------->");
@@ -125,18 +125,10 @@
               var weight_diff=Math.abs(Number(item.field4))-food_weight
               food_weight=food_weight+weight_diff
             }
+            count=1;
           }
           else
           {
-            //to record first row
-            good=good+Number(isNaN(item.field1) ? 0 : item.field1);
-            average=average+ Number(isNaN(item.field2) ? 0 : item.field2);
-            bad=bad+Number(isNaN(item.field3) ? 0 : item.field3);
-            if (food_weight < Math.abs(Number(isNaN(item.field4) ? 0 : item.field4)))
-            {
-              var weight_diff=Math.abs(Number(item.field4))-food_weight
-              food_weight=food_weight+weight_diff
-            }
             row={"field1":good, "field2":average, "field3":bad, "field4":food_weight, "created_at":formatDate(item.created_at)}
             data_for_table.push(row)
             date=date1;
@@ -144,6 +136,7 @@
             average=0;
             bad=0;
             food_weight=0
+            count=0
           }
         });
         //row={"field1":good, "field2":average, "field3":bad, "field4":food_weight, "created_at":date}
