@@ -100,10 +100,6 @@
         console.log(data.feeds);
         // You can now work with the data here
         createTableFromJSON(data.feeds);
-        createChartGood(data.feeds);
-        createChartAverage(data.feeds);
-        createChartBad(data.feeds);
-        createChartWaste(data.feeds);
       })
       .catch(error => {
         console.error('Error:', error);
