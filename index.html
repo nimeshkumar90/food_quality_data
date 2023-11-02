@@ -128,6 +128,15 @@
           }
           else
           {
+            //to record first row
+            good=good+Number(isNaN(item.field1) ? 0 : item.field1);
+            average=average+ Number(isNaN(item.field2) ? 0 : item.field2);
+            bad=bad+Number(isNaN(item.field3) ? 0 : item.field3);
+            if (food_weight < Math.abs(Number(isNaN(item.field4) ? 0 : item.field4)))
+            {
+              var weight_diff=Math.abs(Number(item.field4))-food_weight
+              food_weight=food_weight+weight_diff
+            }
             row={"field1":good, "field2":average, "field3":bad, "field4":food_weight, "created_at":date}
             data_for_table.push(row)
             date=date1;
