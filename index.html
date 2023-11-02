@@ -107,8 +107,6 @@
       });
     function createDisplayData(data)
       {
-        console.log("Nimesh create this data");
-        console.log(data);
         var good=0, average=0, bad=0, food_weight=Number(data[0].field4), date=formatDate(data[0].created_at);
         var data_for_table=[]
         data.forEach(item=>{
@@ -117,7 +115,7 @@
           if (date == date1){
             console.log("item.field1");
             console.log(item.field1);
-            console.log("date");
+            console.log("date--------->");
             console.log(date);
             good=good+Number(isNaN(item.field1) ? 0 : item.field1);
             average=average+ Number(isNaN(item.field2) ? 0 : item.field2);
