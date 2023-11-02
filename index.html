@@ -100,7 +100,7 @@
         console.log(data.feeds);
         // You can now work with the data here
         createDisplayData(data.feeds);
-        createTableFromJSON(data.feeds);
+        //createTableFromJSON(data.feeds);
       })
       .catch(error => {
         console.error('Error:', error);
@@ -108,7 +108,32 @@
     function createDisplayData(data)
       {
         console.log("Nimesh create this data");
-        console.log(data)
+        console.log(data);
+        var good=0, average=0, bad=0, food_weight=0, date=formatDate(data[0].created_at);
+        var data_for_table=[]
+        data.forEach(item=>{
+          var date1=formatDate(item.created_at);
+          if (date == date1){
+            good=good+data.field1;
+            average=average+data.field2;
+            bad=bad+data.field3;
+            if (food_weight < data.field4)
+            {
+              var weight_diff=Math.abs(data.field4)-food_weight
+              food_weight=food_weight+weight_diff
+            }
+          }
+          else
+          {
+            row={"field1":good, "field2":average, "field3":bad, "field4":food_weight, "created_at":date}
+            data_for_table.push(row)
+            date=date1;
+            good=0;
+            average=0;
+            bad=0;
+          }
+        });
+        createTableFromJSON(data_for_table);
       }
       //changing the date format
       // Function to create and populate the table
