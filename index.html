@@ -99,6 +99,7 @@
         // Data is the parsed JSON response
         console.log(data.feeds);
         // You can now work with the data here
+        createDisplayData(data.feeds);
         createTableFromJSON(data.feeds);
       })
       .catch(error => {
