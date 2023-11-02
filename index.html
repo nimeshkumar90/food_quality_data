@@ -114,10 +114,10 @@
         data.forEach(item=>{
           var date1=formatDate(item.created_at);
           if (date == date1){
-            good=good+data.field1;
-            average=average+data.field2;
-            bad=bad+data.field3;
-            if (food_weight < data.field4)
+            good=good+isNaN(data.field1) ? 0 : data.field1;
+            average=average+ isNaN(data.field2) ? 0 : data.field2;
+            bad=bad+isNaN(data.field3) ? 0 : data.field3;
+            if (food_weight < isNaN(data.field4) ? 0 : data.field4)
             {
               var weight_diff=Math.abs(data.field4)-food_weight
               food_weight=food_weight+weight_diff
