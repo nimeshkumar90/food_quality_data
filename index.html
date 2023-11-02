@@ -115,6 +115,10 @@
           var date1=formatDate(item.created_at);
           console.log(date1);
           if (date == date1){
+            if (date == '2023-10-30'){
+              console.log("Tank");
+              console.log(date);
+            }
             good=good+Number(isNaN(item.field1) ? 0 : item.field1);
             average=average+ Number(isNaN(item.field2) ? 0 : item.field2);
             bad=bad+Number(isNaN(item.field3) ? 0 : item.field3);
